@@ -1,0 +1,526 @@
+
+> growgarden@0.1.0 lint
+> eslint
+
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\page.tsx
+  11:42  warning  'BookOpen' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  23:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\page.tsx:23:5
+  21 |     if (user.role !== 'petani') { router.push('/dashboard/pengolah'); return; }
+  22 |     const myProducts = getProducts().filter(p => p.farmerId === user.id);
+> 23 |     setProducts(myProducts);
+     |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  24 |     setTransactions(getTransactionsByFarmer(user.id));
+  25 |   }, [user]);
+  26 |  react-hooks/set-state-in-effect
+  25:6   warning  React Hook useEffect has a missing dependency: 'router'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+  31:9   warning  'totalEarning' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\[id]\page.tsx
+   30:7   error    Error: Cannot access variable before it is declared
+
+`loadData` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\[id]\page.tsx:30:7
+  28 |     params.then(({ id }) => {
+  29 |       setProductId(id);
+> 30 |       loadData(id);
+     |       ^^^^^^^^ `loadData` accessed before it is declared
+  31 |     });
+  32 |   }, []);
+  33 |
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\[id]\page.tsx:34:3
+  32 |   }, []);
+  33 |
+> 34 |   function loadData(pid: string) {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 35 |     const p = getProductById(pid);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 36 |     if (!p) { router.push('/dashboard/petani/produk'); return; }
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 37 |     setProduct(p);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 38 |     setOffers(getOffersByProduct(pid));
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 39 |     setUsers(getUsers());
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 40 |   }
+     | ^^^^ `loadData` is declared here
+  41 |
+  42 |   function handleAccept(offerId: string) {
+  43 |     if (!product || !user) return;  react-hooks/immutability
+   32:6   warning  React Hook useEffect has missing dependencies: 'loadData' and 'params'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+  109:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-img-element
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx
+  101:18  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:101:18
+   99 |             <div className="card-body">
+  100 |               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+> 101 |                 <Field label="Nama Produk *" id="name" error={errors.name}>
+      |                  ^^^^^ This component is created during render
+  102 |                   <input id="name" className="form-input" placeholder="Contoh: Cabai Merah Keriting Gagal Panen"
+  103 |                     value={form.name} onChange={e => update('name', e.target.value)} />
+  104 |                 </Field>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                 react-hooks/static-components
+  107:20  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:107:20
+  105 |
+  106 |                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+> 107 |                   <Field label="Kategori *" id="category">
+      |                    ^^^^^ This component is created during render
+  108 |                     <select id="category" className="form-select" value={form.category} onChange={e => update('category', e.target.value)}>
+  109 |                       {CATEGORIES.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+  110 |                     </select>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                       react-hooks/static-components
+  112:20  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:112:20
+  110 |                     </select>
+  111 |                   </Field>
+> 112 |                   <Field label="Tanggal Panen *" id="harvestDate" error={errors.harvestDate}>
+      |                    ^^^^^ This component is created during render
+  113 |                     <input id="harvestDate" type="date" className="form-input"
+  114 |                       value={form.harvestDate} onChange={e => update('harvestDate', e.target.value)} />
+  115 |                   </Field>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                                                                                                              react-hooks/static-components
+  119:20  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:119:20
+  117 |
+  118 |                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+> 119 |                   <Field label="Jumlah (kg) *" id="quantityKg" error={errors.quantityKg}>
+      |                    ^^^^^ This component is created during render
+  120 |                     <input id="quantityKg" type="number" className="form-input" placeholder="500"
+  121 |                       value={form.quantityKg} onChange={e => update('quantityKg', e.target.value)} min="1" />
+  122 |                   </Field>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                                                react-hooks/static-components
+  123:20  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:123:20
+  121 |                       value={form.quantityKg} onChange={e => update('quantityKg', e.target.value)} min="1" />
+  122 |                   </Field>
+> 123 |                   <Field label="Harga per kg (Rp) *" id="pricePerKg" error={errors.pricePerKg}>
+      |                    ^^^^^ This component is created during render
+  124 |                     <input id="pricePerKg" type="number" className="form-input" placeholder="3500"
+  125 |                       value={form.pricePerKg} onChange={e => update('pricePerKg', e.target.value)} min="1" />
+  126 |                   </Field>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>  react-hooks/static-components
+  129:18  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:129:18
+  127 |                 </div>
+  128 |
+> 129 |                 <Field label="Lokasi *" id="location" error={errors.location}>
+      |                  ^^^^^ This component is created during render
+  130 |                   <input id="location" className="form-input" placeholder="Kabupaten, Provinsi"
+  131 |                     value={form.location} onChange={e => update('location', e.target.value)} />
+  132 |                 </Field>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                                                                                                                                                          react-hooks/static-components
+  134:18  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:134:18
+  132 |                 </Field>
+  133 |
+> 134 |                 <Field label="Metode Penyimpanan" id="storageMethod">
+      |                  ^^^^^ This component is created during render
+  135 |                   <select id="storageMethod" className="form-select" value={form.storageMethod} onChange={e => update('storageMethod', e.target.value)}>
+  136 |                     {STORAGE_METHODS.map(m => <option key={m}>{m}</option>)}
+  137 |                   </select>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                                                                                                                        react-hooks/static-components
+  140:18  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:140:18
+  138 |                 </Field>
+  139 |
+> 140 |                 <Field label="Deskripsi Produk" id="description">
+      |                  ^^^^^ This component is created during render
+  141 |                   <textarea id="description" className="form-textarea"
+  142 |                     placeholder="Jelaskan kondisi produk, alasan gagal sortasi, kegunaan potensial, dll."
+  143 |                     value={form.description} onChange={e => update('description', e.target.value)}
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                                                                                                          react-hooks/static-components
+  147:18  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:147:18
+  145 |                 </Field>
+  146 |
+> 147 |                 <Field label="URL Foto Produk (opsional)" id="imageUrl">
+      |                  ^^^^^ This component is created during render
+  148 |                   <input id="imageUrl" className="form-input" placeholder="https://..."
+  149 |                     value={form.imageUrl} onChange={e => update('imageUrl', e.target.value)} />
+  150 |                   <span style={{ fontSize: '0.78rem', color: 'var(--nt-text-muted)', marginTop: '0.25rem' }}>
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\baru\page.tsx:73:17
+  71 |   }
+  72 |
+> 73 |   const Field = ({ label, id, error, children }: { label: string; id: string; error?: string; children: React.ReactNode }) => (
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 74 |     <div className="form-group">
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 75 |       <label className="form-label" htmlFor={id}>{label}</label>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 76 |       {children}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 77 |       {error && <span className="form-error">{error}</span>}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     </div>
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   );
+     | ^^^^ The component is created during render here
+  80 |
+  81 |   return (
+  82 |     <>                                                                                 react-hooks/static-components
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\page.tsx
+  28:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\produk\page.tsx:28:5
+  26 |   useEffect(() => {
+  27 |     if (!user) { router.push('/auth/login'); return; }
+> 28 |     loadProducts();
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  29 |   }, [user]);
+  30 |
+  31 |   function handleDelete(id: string) {  react-hooks/set-state-in-effect
+  29:6  warning  React Hook useEffect has missing dependencies: 'loadProducts' and 'router'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/exhaustive-deps
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\riwayat\page.tsx
+  20:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(dashboard)\dashboard\petani\riwayat\page.tsx:20:5
+  18 |   useEffect(() => {
+  19 |     if (!user) { router.push('/auth/login'); return; }
+> 20 |     setTransactions(getTransactionsByFarmer(user.id));
+     |     ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  21 |     setProducts(getProducts());
+  22 |     setUsers(getUsers());
+  23 |   }, [user]);  react-hooks/set-state-in-effect
+  23:6  warning  React Hook useEffect has a missing dependency: 'router'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/exhaustive-deps
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\(public)\auth\register\page.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\pengembang\page.tsx
+  3:8  warning  'Link' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\pengolah\cari-bahan\page.tsx
+  234:41  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  234:54  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\pengolah\chat\page.tsx
+  10:3  warning  'HiOfficeBuilding' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\pengolah\dashboard\page.tsx
+  16:11  warning  'user' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\pengolah\penawaran\page.tsx
+  3:10  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\app\pengolah\profil\page.tsx
+  227:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\components\ActivityList.tsx
+  9:3  warning  'HiChat' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\components\OrderList.tsx
+  3:10  warning  'HiCheckCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  3:51  warning  'HiUserGroup' is defined but never used    @typescript-eslint/no-unused-vars
+  3:64  warning  'HiShoppingBag' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\components\Sidebar.tsx
+  26:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\components\SidebarPetani.tsx
+   29:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   81:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   94:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  104:9   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\dashboard\OfferCard.tsx
+  4:35  warning  'Weight' is defined but never used  @typescript-eslint/no-unused-vars
+  4:43  warning  'Tag' is defined but never used     @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\dashboard\ProductCard.tsx
+   4:63  warning  'Clock' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  31:9   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\landing\Footer.tsx
+  36:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\landing\MasalahSection.tsx
+  85:29  warning  'idx' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\landing\TestimoniSection.tsx
+   47:5   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-img-element
+  369:28  error    Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\landing\TestimoniSection.tsx:369:28
+  367 |                 display: 'flex',
+  368 |                 gap: '1.25rem',
+> 369 |                 transform: getTransform(),
+      |                            ^^^^^^^^^^^^ This function accesses a ref value
+  370 |                 transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
+  371 |                 willChange: 'transform',
+  372 |               }}  react-hooks/refs
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\layout\Sidebar.tsx
+   69:9   warning  'roleColor' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  192:10  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\layout\Sidebar.tsx:192:10
+  190 |       {/* Desktop sidebar */}
+  191 |       <aside className={`sidebar ${mobileOpen ? 'open' : ''}`}>
+> 192 |         <SidebarContent />
+      |          ^^^^^^^^^^^^^^ This component is created during render
+  193 |       </aside>
+  194 |
+  195 |       {/* Mobile overlay */}
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\layout\Sidebar.tsx:79:26
+   77 |   }
+   78 |
+>  79 |   const SidebarContent = () => (
+      |                          ^^^^^^^
+>  80 |     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  81 |
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 170 |     </div>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 171 |   );
+      | ^^^^ The component is created during render here
+  172 |
+  173 |   return (
+  174 |     <>  react-hooks/static-components
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\components\layout\Topbar.tsx
+  6:10  warning  'Bell' is defined but never used  @typescript-eslint/no-unused-vars
+  6:29  warning  'Leaf' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\contexts\AuthContext.tsx
+  57:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\yulia\Documents\NEXTJS2026\growgarden\src\contexts\AuthContext.tsx:57:5
+  55 |     seedIfNeeded();
+  56 |     const current = getCurrentUser();
+> 57 |     setUser(current);
+     |     ^^^^^^^ Avoid calling setState() directly within an effect
+  58 |     setLoading(false);
+  59 |   }, []);
+  60 |  react-hooks/set-state-in-effect
+  61:51  warning  '_password' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+
+✖ 51 problems (18 errors, 33 warnings)
+
